@@ -7,3 +7,4 @@ dataset==1.1.0
 python_dateutil==2.7.5
 scikit_learn==0.20.1
 dill=0.2.8.2
+tensorflow_hub=0.2.0

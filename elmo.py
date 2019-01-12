@@ -7,7 +7,7 @@ import tensorflow as tf
 import tensorflow_hub as hub
 from keras import backend as K
 from keras.engine import Layer
-from utils import do_xml_parse, extract_text
+from utils import *
 
 
 class ElmoParser:

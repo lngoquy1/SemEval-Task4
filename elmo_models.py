@@ -1,19 +1,19 @@
 import argparse
 from labeler import BinaryLabels
-import elmo
+from elmo import *
 import numpy as np
 np.random.seed(123)
 import tensorflow as tf
 import keras.layers as layers
 from keras.models import Model
-
+from utils import *
 
 # Function to build model
 def build_model():
   input_text = layers.Input(shape=(1,), dtype="string")
   embedding = ElmoEmbeddingLayer()(input_text)
   dense = layers.Dense(256, activation='relu')(embedding)
-  pred = layers.Dense(1, activation='sigmoid')(dense)
+  pred = layers.Dense(2, activation='sigmoid')(dense)
 
   model = Model(inputs=[input_text], outputs=pred)
 
@@ -27,23 +27,23 @@ def do_experiment(args):
     # Read in training and testing data
     labeler = BinaryLabels()
     train_text = ElmoParser(args.training, args.train_size, args.article_length).all_text
-    train_labels = labeler.process(args.labels, args.train_size)
+    train_label = labeler.process(args.labels, args.train_size)
     test_text = ElmoParser(args.testing, args.test_size, args.article_length).all_text
-    test_labels = labeler.process(args.test_labels, args.test_size)
+    test_label = labeler.process(args.test_labels, args.test_size)
 
-    print("train_text", train_text)
-    print("train_labels", train_labels)
+    # print("train_text", train_text)
+    # print("train_labels", train_labels)
 
-    # sess = tf.Session()
-    # K.set_session(sess)
-    #
-    # # Build and fit
-    # model = build_model()
-    # model.fit(train_text,
-    #           train_label,
-    #           validation_data=(test_text, test_label),
-    #           epochs=1,
-    #           batch_size=32)
+    sess = tf.Session()
+    K.set_session(sess)
+
+    # Build and fit
+    model = build_model()
+    model.fit(train_text,
+              train_label,
+              validation_data=(test_text, test_label),
+              epochs=1,
+              batch_size=32)
 
 
 if __name__ == '__main__':
