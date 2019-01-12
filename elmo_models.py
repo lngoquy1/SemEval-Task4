@@ -62,4 +62,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
     do_experiment(args)
 
-    for fp in (args.training, args.labels, args.test_data, args.test_labels): fp.close()
+    for fp in (args.training, args.labels, args.testing, args.test_labels): fp.close()

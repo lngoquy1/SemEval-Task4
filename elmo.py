@@ -8,6 +8,7 @@ import tensorflow_hub as hub
 from keras import backend as K
 from keras.engine import Layer
 from utils import *
+import numpy as np
 
 
 class ElmoParser:
@@ -18,6 +19,8 @@ class ElmoParser:
             self.all_text = [extract_sentences(article)[:max_len] for article in self.articles]
         else:
             self.all_text = [extract_sentences(article) for article in self.articles]
+
+        self.all_text = np.array(self.all_text, dtype=object)[:, np.newaxis]
 
 
 
