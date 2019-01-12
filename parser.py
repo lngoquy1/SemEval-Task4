@@ -1,4 +1,3 @@
-from HyperpartisanNewsReader import do_xml_parse, ParserVocab
 import argparse
 from html import unescape
 from dateutil.parser import parse
@@ -6,6 +5,7 @@ import re
 import numpy as np
 from collections import Counter
 import nltk
+from utils import *
 from nltk.corpus import stopwords
 import multiprocessing
 from multiprocessing import Pool, freeze_support
@@ -19,7 +19,6 @@ class Parser:
 
     def __init__(self, file_name, train_size, max_len):
         self.X = []
-        self.y = []
         self.all_feats = None
         self.vocab = {}
         self.num_banned = []
@@ -160,9 +159,6 @@ class Parser:
 
 
 ########################### HELPER FUNCTIONS ###########################
-def extract_text(article):
-    return unescape("".join([x for x in article.find("spacy").itertext()])).split()
-
 def extract_tag(self, article):
     return unescape("".join([x for x in article.find("tag").itertext()])).split()
 
@@ -253,33 +249,3 @@ def map_bow_features_wrapper(articles, vocab, vocabulary_size):
     mapped =  [[vocab[w] if w in vocab else 0 for w in article] for article in articles]
     bow_vecs = [get_bow(xi, vocabulary_size) for xi in mapped]
     return np.array(bow_vecs)
-# def do_experiment(args):
-#     vocab = HNVocab(args.vocabulary, args.vocab_size, args.stop_words)
-#     parser = Parser(vocab)
-#     parser.process(args.training, args.train_size)
-#     print(parser.X)
-
-
-
-
-
-
-
-
-# if __name__ == '__main__':
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument("training", type=argparse.FileType('rb'), help="Training articles")
-#     # parser.add_argument("labels", type=argparse.FileType('rb'), help="Training article labels")
-#     parser.add_argument("vocabulary", type=argparse.FileType('r'), help="Vocabulary")
-#     # parser.add_argument("-o", "--output_file", type=argparse.FileType('w'), default=sys.stdout, help="Write predictions to FILE", metavar="FILE")
-#     parser.add_argument("-s", "--stop_words", type=int, metavar="N", help="Exclude the top N words as stop words", default=None)
-#     parser.add_argument("-v", "--vocab_size", type=int, metavar="N", help="Only count the top N words from the vocab file (after stop words)", default=None)
-#     parser.add_argument("--train_size", type=int, metavar="N", help="Only train on the first N instances.", default=None)
-#     # parser.add_argument("--test_size", type=int, metavar="N", help="Only test on the first N instances.", default=None)
-#
-#     # eval_group = parser.add_mutually_exclusive_group(required=True)
-#     # eval_group.add_argument("-t", "--test_data", type=argparse.FileType('rb'), metavar="FILE")
-#     # eval_group.add_argument("-x", "--xvalidate", type=int)
-#
-#     args = parser.parse_args()
-#     do_experiment(args)
